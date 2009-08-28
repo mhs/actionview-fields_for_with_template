@@ -5,11 +5,13 @@ module ActionView
         options = args.extract_options!
         options[:child_index] = NumericSequence.new
         args << options
-        fields_for record_or_name_or_array, *args, &block
-        fields_for record_or_name_or_array, object.send(record_or_name_or_array).new, :child_index => "NEW_RECORD" do |f|
-          @template.concat %|<div class="template" style="display:none">|
+        unless options[:template_only]
+          fields_for record_or_name_or_array, *args, &block
+        end
+        @template.fields_for "#{@object_name}[#{record_or_name_or_array.to_s.singularize}_attributes][new]", object.send(record_or_name_or_array).new, :index => "NEW_RECORD" do |f|
+          @template.concat %|<div class="template" style="display:none">|, @proc
           block.call f
-          @template.concat %|</div>|
+          @template.concat %|</div>|, @proc
         end
       end
     end
