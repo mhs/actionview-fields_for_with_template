@@ -6,7 +6,7 @@ module ActionView
         options[:child_index] = NumericSequence.new
         args << options
         
-        records = object.send(record_or_name_or_array)
+        records = args.first.is_a?(Array) ? args.shift : object.send(record_or_name_or_array)
         if records.any?
           records.reject(&:new_record?).each do |record|
             nargs = args.dup
