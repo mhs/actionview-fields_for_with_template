@@ -8,9 +8,9 @@ module ActionView
 
         result = fields_for record_or_name_or_array, *args, &block
         result += fields_for record_or_name_or_array, object.send(record_or_name_or_array).new, :child_index => "NEW_RECORD" do |f|
-          @template.concat %|<div class="template" style="display:none">|.html_safe
+          @template.concat %|<script type="text/html" id="#{options[:id]}">|.html_safe
           block.call f
-          @template.concat %|</div>|.html_safe
+          @template.concat %|</script>|.html_safe
         end
 
         result
